@@ -15,7 +15,5 @@ public class ApiError {
     private String message;
     private List<String> subErrors;
 
-//    public static ResponseEntity<Object> builder() {
-//        return null;
-//    }
+
 }
