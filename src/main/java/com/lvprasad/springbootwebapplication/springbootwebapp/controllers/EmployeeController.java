@@ -3,6 +3,7 @@ package com.lvprasad.springbootwebapplication.springbootwebapp.controllers;
 
 import com.lvprasad.springbootwebapplication.springbootwebapp.dto.EmployeeDTO;
 import com.lvprasad.springbootwebapplication.springbootwebapp.entities.EmployeeEntity;
+import com.lvprasad.springbootwebapplication.springbootwebapp.exceptions.ResourceNotFoundException;
 import com.lvprasad.springbootwebapplication.springbootwebapp.repositories.EmployeeRepository;
 import com.lvprasad.springbootwebapplication.springbootwebapp.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 //import java.time.LocalDate;
@@ -44,8 +46,15 @@ public class EmployeeController {
 //        System.out.println("ResponseEntity<EmployeeDTO>===>" + employeeDTO.map(employee -> employee.getName()));
         return employeeDTO
                 .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(()-> new ResourceNotFoundException("Resource with id " + id + " not found" + ":" + id));
     }
+
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<String> handleEmployeeNotFound(NoSuchElementException e) {
+////        return e.getMessage();
+//        return new  ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+//    }
+
 
 
     @GetMapping

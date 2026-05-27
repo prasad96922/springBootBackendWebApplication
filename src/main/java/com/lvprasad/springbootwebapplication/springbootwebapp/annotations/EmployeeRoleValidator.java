@@ -7,11 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EmployeeRoleValidator implements ConstraintValidator<EmployeeRoleValidation, String> {
+public class
+
+
+
+EmployeeRoleValidator implements ConstraintValidator<EmployeeRoleValidation, String> {
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(String inputRole, ConstraintValidatorContext context) {
+        if (inputRole == null) return false;
         List<String> roles = List.of("USER", "ADMIN");
-        return roles.contains(value);
+        return roles.contains(inputRole);
+
+
+
+
     }
+
+
+
 }

@@ -3,6 +3,7 @@ package com.lvprasad.springbootwebapplication.springbootwebapp.services;
 
 import com.lvprasad.springbootwebapplication.springbootwebapp.dto.EmployeeDTO;
 import com.lvprasad.springbootwebapplication.springbootwebapp.entities.EmployeeEntity;
+import com.lvprasad.springbootwebapplication.springbootwebapp.exceptions.ResourceNotFoundException;
 import com.lvprasad.springbootwebapplication.springbootwebapp.repositories.EmployeeRepository;
 import org.apache.el.util.ReflectionUtil;
 import org.modelmapper.ModelMapper;
@@ -55,26 +56,27 @@ public class EmployeeService {
  }
 
  public EmployeeDTO updateEmployeeById(Long id, EmployeeDTO employeeDTO) {
+   isExistingEmployeeById(id);
    EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
    employeeEntity.setId(id);
    EmployeeEntity  saveEmployeeEntity =  employeeRepository.save(employeeEntity);
    return  modelMapper.map(saveEmployeeEntity, EmployeeDTO.class);
  }
 
- public boolean isExistingEmployeeById(Long id) {
-  return employeeRepository.existsById(id);
+ public void isExistingEmployeeById(Long id) {
+     boolean exists = employeeRepository.existsById(id);
+     if (!exists) throw new ResourceNotFoundException("Employee with id " + id + " not found");
+//  return employeeRepository.existsById(id);
  }
 
  public String  deleteByEmployeeById(Long id) {
-  boolean exists = isExistingEmployeeById(id);
-  if (!exists) return "Employee not found";
+  isExistingEmployeeById(id);
   employeeRepository.deleteById(id);
   return "Employee deleted successfully";
  }
 
  public EmployeeDTO updatePartialEmployeeById(Long id, Map<String, Object> updates) {
-  boolean exists = isExistingEmployeeById(id);
-  if (!exists) return null;
+  isExistingEmployeeById(id);
   EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
   updates.forEach((field, value) -> {
     Field fieldToBeUpdated = ReflectionUtils.findField(EmployeeEntity.class, field);

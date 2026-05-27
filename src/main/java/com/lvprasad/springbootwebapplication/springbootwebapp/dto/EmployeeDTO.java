@@ -17,7 +17,7 @@ public class EmployeeDTO {
     private Long id;
 
     //Annotion of validation (you can google for business use case)
-//    @NotNull(message = "Required field in Employee: name")
+    @NotNull(message = "Required field in Employee: name")
     @NotEmpty(message = "Name of the the Employee cannot be Empty: name")
     @NotBlank(message = "Name of the the Employee cannot be Blank: name")
     @Size(min=3, max=10, message="Number of Characters should be in this range only:[3,10]")
